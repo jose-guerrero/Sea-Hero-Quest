@@ -1,0 +1,54 @@
+<html>
+	<head>
+		<title>SeaHeroQuest</title>
+		<link rel="stylesheet" type="text/css" href="styles.css">
+		<script type="text/javascript" src="js/three.min.js"></script>
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/OrbitControls.js"></script>
+		<script type="text/javascript" src="js/cannon.js"></script>
+		<script type="text/javascript" src="js/MTLLoader.js" ></script>
+		<script type="text/javascript" src="js/OBJLoader.js" ></script>
+		<script type="text/javascript" src="js/THREEx.KeyboardState.js"></script>
+		<script type="text/javascript" src="js/threeCSG.js"></script>
+		<script type="text/javascript" src="js/script.js"></script>
+		<meta name='viewport' content='width=device-width'/>
+	</head>
+	<body>
+
+		<script>
+		function sub(){
+		var modal = document.getElementById('myModal2');
+		modal.style.display = "none";}
+		</script>
+		<div id="canvas"></div>
+		<div id="preloader">
+			<div class="sk-cube-grid"><div class="sk-cube sk-cube1"></div><div class="sk-cube sk-cube2"></div><div class="sk-cube sk-cube3"></div><div class="sk-cube sk-cube4"></div><div class="sk-cube sk-cube5"></div><div class="sk-cube sk-cube6"></div><div class="sk-cube sk-cube7"></div><div class="sk-cube sk-cube8"></div><div class="sk-cube sk-cube9"></div></div>
+		</div>
+		<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  		<div class="modal-content">
+  		  <p id="orejas">Congratulations!!! You finished this level</p>
+				<form action="stats.html">
+					  <input type="submit" id="second_button" value="Go to Stats">
+				</form>
+		  </div>
+		</div>
+
+		<div id="myModal2" class="modal">
+
+  <!-- Modal content -->
+  		<div class="modal-content">
+  		  <p id="orejas">Are you sure you want to leave?</p>
+				<form action="index.html">
+					  <input type="submit" id="yes_button" value="Yes">
+				</form>
+
+				<input type="submit" id="no_button" value="No" onclick="sub()">
+
+		  </div>
+		</div>
+
+
+	</body>
+</html>

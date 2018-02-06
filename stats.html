@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript" src="js/jquery.js"></script>
+
+  <title>Document</title>
+</head>
+<body>
+  <h1>Loading....</h1>
+  <script>
+
+  $(document).ready(function(){
+    var len_name = [];
+    var len_scores = [];
+
+    $.ajax({
+      type : 'GET',
+      url : "https://usernamescoredb.herokuapp.com/users",
+      data: {
+        format: 'json'
+      },
+      headers : {
+        'Access-Control-Allow-Origin' : '*'
+      },
+      success : function(data, textStatus) {
+
+        console.log(data[0]);
+          console.log(data[0].scores);
+
+        for (let j=0;j<data.length;j++)
+        {
+          if (j===0){
+              document.write("<h1>Scores</h1>");
+              document.write("<table>");
+              document.write('<tr><th>Username</th><th>Time</th></tr>');
+          }
+
+          document.write('<tr><td>' + data[j].name + '</td>');
+          document.write('<td>' + data[j].scores[0].score + '</td></tr>');
+        }
+
+      },
+      error : function(xhr, textStatus, errorThrown) {
+
+      console.log('error');
+      }
+    });
+  });
+
+
+  </script>
+
+</body>
+</html>
