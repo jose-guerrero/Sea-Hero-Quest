@@ -10,7 +10,17 @@
   <title>Document</title>
 </head>
 <body>
-  <h1>Loading....</h1>
+  <table id="table">
+    <thead>
+      <tr>
+        <th>Username</th><th>Time(s)</th>
+      </tr>
+    </thead>
+
+    <tbody>
+    </tbody>
+  </table>
+
   <script>
 
   $(document).ready(function(){
@@ -29,20 +39,22 @@
       success : function(data, textStatus) {
 
         console.log(data[0]);
-          console.log(data[0].scores);
+        console.log(data[0].scores);
 
-        for (let j=0;j<data.length;j++)
+        let table = $('#table tbody');
+        let row,col,cell;
+
+        for (let i=0;i<data.length;i++)
         {
-          if (j===0){
-              document.write("<h1>Scores</h1>");
-              document.write("<table>");
-              document.write('<tr><th>Username</th><th>Time</th></tr>');
-          }
+          row = $('<tr />');
+          table.append(row);
 
-          document.write('<tr><td>' + data[j].name + '</td>');
-          document.write('<td>' + data[j].scores[0].score + '</td></tr>');
+          cell = $('<td>'+data[i].name+'</td>');
+          row.append(cell);
+
+          cell = $('<td>'+data[i].scores[0].score+'</td>');
+          row.append(cell);
         }
-
       },
       error : function(xhr, textStatus, errorThrown) {
 

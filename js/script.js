@@ -1,7 +1,4 @@
 
-
-"use strict";
-
 var Colors = {
 	white:0xd8d0d1,
 	grey:0xcccccc,
@@ -17,63 +14,11 @@ var Colors = {
 	brass: 0xbca345,
 };
 
-var verShader = `
-#define SCALE 50.0
-varying vec2 vUv;
-uniform float uTime;
-float calculateSurface(float x, float z) {
-    float y = 0.0;
-    y += sin(x * 2.8 / SCALE + uTime * 1.5);
-    y += sin(z * 2.45 / SCALE + uTime * 1.7);
-    return y;
-}
-void main() {
-    vUv = uv;
-    vec3 pos = position;
-
-    float strength = 1.0;
-    pos.y += strength * calculateSurface(pos.x, pos.z);
-    pos.y -= strength * calculateSurface(0.0, 0.5);
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.1);
-}
-`;
-
-var fragShader = `
-varying vec2 vUv;
-uniform sampler2D uMap;
-uniform float uTime;
-uniform vec3 uColor;
-uniform vec3 fogColor;
-uniform float fogNear;
-uniform float fogFar;
-void main() {
-    vec2 uv = vUv * 50.0 + vec2(uTime * -0.05);
-    uv.y += 0.01 * (sin(uv.x * 3.5 + uTime * 0.35) + sin(uv.x * 4.8 + uTime * 1.05) + sin(uv.x * 7.3 + uTime * 0.45)) / 3.0;
-    uv.x += 0.12 * (sin(uv.y * 4.0 + uTime * 0.5) + sin(uv.y * 6.8 + uTime * 0.75) + sin(uv.y * 11.3 + uTime * 0.2)) / 3.0;
-    uv.y += 0.12 * (sin(uv.x * 4.2 + uTime * 0.64) + sin(uv.x * 6.3 + uTime * 1.65) + sin(uv.x * 8.2 + uTime * 0.45)) / 3.0;
-    vec4 tex1 = texture2D(uMap, uv * 1.0);
-    vec4 tex2 = texture2D(uMap, uv * 1.5 + vec2(0.2));
-    vec3 blue = uColor;
-    gl_FragColor = vec4(blue + vec3(tex1.a * 0.4 - tex2.a * 0.02), 1.0);
-    gl_FragColor.a = 0.8;
-    #ifdef USE_FOG
-          #ifdef USE_LOGDEPTHBUF_EXT
-              float depth = gl_FragDepthEXT / gl_FragCoord.w;
-          #else
-              float depth = gl_FragCoord.z / gl_FragCoord.w;
-          #endif
-          float fogFactor = smoothstep( fogNear, fogFar, depth );
-          gl_FragColor.rgb = mix( gl_FragColor.rgb, fogColor, fogFactor );
-     #endif
-}
-`;
-
-
 window.addEventListener('load', init, false);
 
 var scene, camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,renderer, container, controls,loaderManager,loaded;
 
-var sphereShape, sphereBody, world, physicsMaterial, walls=[], balls=[], ballMeshes=[], boxes=[], boxMeshes=[];
+var sphereShape, sphereBody, world, walls=[], balls=[], ballMeshes=[], boxes=[], boxMeshes=[];
 
 
 var keyboard = new THREEx.KeyboardState();
@@ -82,42 +27,6 @@ var clock = new THREE.Clock();
 
 
 var isMobile = /iPhone|Android/i.test(navigator.userAgent);
-
-
-function startPhysics(){
-    // Setup our world
-    world = new CANNON.World();
-    world.gravity.set(0,0,-10);
-    world.broadphase = new CANNON.NaiveBroadphase();
-
-
-    // Create a slippery material (friction coefficient = 0.0)
-    physicsMaterial = new CANNON.Material("slipperyMaterial");
-    var physicsContactMaterial = new CANNON.ContactMaterial(
-    	physicsMaterial,
-        physicsMaterial,
-        0.0, // friction coefficient
-        0.3  // restitution
-    );
-
-    // We must add the contact materials to the world
-    world.addContactMaterial(physicsContactMaterial);
-
-    // Create a sphere
-    var mass = 5, radius = 1.3;
-	var sphereShape = new CANNON.Sphere(radius); // Step 1
-	var sphereBody = new CANNON.Body({mass: mass, shape: sphereShape}); // Step 2
-	sphereBody.position.set(0,5,0);
-	sphereBody.linearDamping = 0.9;
-	world.add(sphereBody); // Step 3
-
-    // Create a plane
-    var groundShape = new CANNON.Plane();
-    var groundBody = new CANNON.Body({ mass: 0, shape: groundShape});
-    groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
-    world.addBody(groundBody);
-}
-
 
 function createScene() {
 
@@ -209,23 +118,9 @@ var Sea = function() {
 	    fogFar:      { type: "f", value: scene.fog.far }
     };
 
-	var shader = new THREE.ShaderMaterial({
-
-	    uniforms: this.uniforms,
-	    vertexShader: verShader,
-	    fragmentShader: fragShader,
-	    side: THREE.DoubleSide,
-	    fog: true,
-	    transparent:true,
-	});
 
     var textureLoader = new THREE.TextureLoader(loaderManager);
-    textureLoader.load('images/water-shader.jpg', function (texture) {
-        shader.uniforms.uMap.value = texture;
-        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-    });
 
-	this.mesh = new THREE.Mesh(geomWaves, shader);
 
 	var geomSeaBed = new THREE.PlaneBufferGeometry(2000, 2000, 5, 5);
 	geomSeaBed.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
@@ -234,7 +129,7 @@ var Sea = function() {
 		shading:THREE.SmoothShading,
 	});
 	var seaBed = new THREE.Mesh(geomSeaBed, matWaves);
-	seaBed.position.set(0,-10,0);
+	seaBed.position.set(0,0,0);
 	seaBed.castShadow = false;
 	seaBed.receiveShadow = true;
 	this.mesh.add(seaBed);
@@ -266,7 +161,7 @@ function initSkybox(){
 		depthWrite: false,
 		side: THREE.BackSide
 
-	} ), skyBox = new THREE.Mesh( new THREE.BoxGeometry( 4000, 2000, 4000 ), material );
+	} ), skyBox = new THREE.Mesh( new THREE.BoxGeometry( 2000, 1000, 2000 ), material );
 	skyBox.position.set(0,0,0);
 	scene.add( skyBox );
 }
@@ -374,11 +269,6 @@ var swayBeacon = function (){
     }
 }
 
-
-
-
-
-
 var Boat = function() {
 
 	this.mesh = new THREE.Object3D();
@@ -419,7 +309,7 @@ var Boat = function() {
 		geomHull.vertices[1].z-=10;
 		geomHull.vertices[7].z-=10;
 	geomHull.applyMatrix( new THREE.Matrix4().makeTranslation(0, -1.25, 0) );
-	var hull = new THREE.Mesh(geomHull, matWhite);
+	var hull = new THREE.Mesh(geomHull, matRed);
 	hull.updateMatrix();
 	geomWhiteMerged.merge(hull.geometry, hull.matrix);
 
@@ -583,7 +473,7 @@ var Boat = function() {
 
 	// Railing
 	var geomRail = new THREE.BoxGeometry(1.5,3,1.5,);
-	var rail1 = new THREE.Mesh(geomRail, matBrown);
+	var rail1 = new THREE.Mesh(geomRail, matRed);
 	rail1.castShadow = true;
 	rail1.receiveShadow = true;
 	rail1.position.set(11,7,23.5);
@@ -683,7 +573,7 @@ var Boat = function() {
 	cabinet.position.set(0,13,10);
 
 	var geomCabinCorner = new THREE.BoxGeometry(2,24,2);
-	var cabinCorner1 = new THREE.Mesh(geomCabinCorner, matBrown);
+	var cabinCorner1 = new THREE.Mesh(geomCabinCorner, matRed);
 	cabinCorner1.castShadow = true;
 	cabinCorner1.receiveShadow = true;
 	cabinCorner1.position.set(7,14,3);
@@ -698,7 +588,7 @@ var Boat = function() {
 	geomBrownMerged.merge(cabinCorner2.geometry, cabinCorner2.matrix);
 
 	var geomCabinCornerShort = new THREE.BoxGeometry(2,22,2);
-	var cabinCorner3 = new THREE.Mesh(geomCabinCornerShort, matBrown);
+	var cabinCorner3 = new THREE.Mesh(geomCabinCornerShort, matRed);
 	cabinCorner3.castShadow = true;
 	cabinCorner3.receiveShadow = true;
 	cabinCorner3.position.set(-7,13,17);
@@ -920,7 +810,7 @@ var Boat = function() {
 
 	this.group.add(this.engineBlock);
 
-	var whiteGeom = new THREE.Mesh(geomWhiteMerged, matWhite);
+	var whiteGeom = new THREE.Mesh(geomWhiteMerged, matYellow);
 	whiteGeom.castShadow = true;
 	whiteGeom.receiveShadow = true;
 	this.group.add(whiteGeom);
@@ -962,9 +852,8 @@ var Boat = function() {
 
 	var listener = new THREE.AudioListener();
 camera.add( listener );
-
-// create a global audio source
-var sound = new THREE.Audio( listener );
+/*
+// create a global audio sourcevar sound = new THREE.Audio( listener );
 
 // load a sound and set it as the Audio object's buffer
 var audioLoader = new THREE.AudioLoader();
@@ -974,7 +863,7 @@ audioLoader.load( 'sounds/tetris.mp3', function( buffer ) {
 	sound.setVolume( 0.5 );
 	sound.play();
 });
-
+*/
 }
 
 
@@ -1063,17 +952,16 @@ var tomado=[false,false,false,false,false];
 
 function init() {
 
-	startPhysics();
 	createScene();
 	createLights();
 	createSea();
   createYacht();
 	createBoat();
-	createBeacon( -327, 0.25, -387);
-	createBeacon( 10, 0.25, 428);
-	createBeacon( 462, 0.25, 51);
-	createBeacon( -453, 0.25, 455);
-	createBeacon( -266, 0.25, 220);
+	createBeacon( Math.random() * ((-480) - (-700)) + (-700), 0.25, Math.random() * ((-480) - (-700)) + (-700));
+	createBeacon( Math.random() * ((700) - (480)) + (480), 0.25, Math.random() * ((-480) - (-700)) + (-700));
+	createBeacon( Math.random() * ((-480) - (-700)) + (-700), 0.25, Math.random() * ((700) - (480)) + (480));
+	createBeacon( Math.random() * ((-480) - (-700)) + (-700), 0.25, Math.random() * ((700) - (480)) + (480));
+	createBeacon( Math.random() * ((700) - (480)) + (480), 0.25,Math.random() * ((700) - (480)) + (480));
 
 	initSkybox();
 	initTime();
@@ -1083,6 +971,7 @@ function init() {
 
 
 function loop(e){
+	console.log(e);
 	sea.uniforms.uTime.value = e * 0.001;
 	swayBeacon();
 	boat.swayBoat();
@@ -1220,47 +1109,12 @@ function animation (){
 						 console.log("success");
 					 }
 				 }
-					});
-}
+			 });
+		 }
 
-			////
-
-
-		/*		$.ajax({
- type : 'GET',
- url : "https://usernamescoredb.herokuapp.com/users/1",
- data: {
-	 format: 'json'
- },
-headers : {
-	'Access-Control-Allow-Origin' : '*'
-},
- success : function(data, textStatus) {
-	console.log(data);
-
- },
- error : function(xhr, textStatus, errorThrown) {
-	console.log('error');
- }
-
-});*/
-
-
-
-
-
-/*
-$.post("https://usernamescoredb.herokuapp.com/users",
-{
-	name:"usu"
-},
-function(data,status){
-	console.log(data);
-});*/
 
 			break;
 		}
 	}
-	//console.log(boat.mesh.position);
 	controls.update();
 }

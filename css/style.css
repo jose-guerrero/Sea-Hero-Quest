@@ -5,6 +5,7 @@
  -moz-background-size: cover;
  -o-background-size: cover;
  background-size: cover;
+ background-repeat: no-repeat;
 
 }
 
@@ -12,21 +13,24 @@
 {
   background-image:url("../images/tu.jpg");
   -webkit-background-size: cover;
- -moz-background-size: cover;
- -o-background-size: cover;
- background-size: cover;
-
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 
 #container{
   display: block;
-  margin: 450px auto;
+  margin: 200px auto;
 }
 
 #entradas{
-  display: grid;
+  margin-top:  200px;
+  display: flex;
+  flex-direction: column;
 }
+
 #identity{
   display: block;
   self-justify: center;
@@ -54,3 +58,23 @@
    flex-direction: column;
    font-size: 30px;
 }
+
+table,tr,th,td{
+  border: 1px solid black;
+
+}
+
+#table{
+
+  width: 300px;
+  margin: 100px auto;
+}
+
+th,td,tr{
+  text-align: center;
+}
+
+table{
+  border-collapse: collapse;
+}
+tr:nth-child(even) {background-color: #f2f2f2;}
