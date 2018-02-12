@@ -14,19 +14,17 @@ var Colors = {
 	brass: 0xbca345,
 };
 
+
+
+
 window.addEventListener('load', init, false);
 
 var scene, camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,renderer, container, controls,loaderManager,loaded;
 
 var sphereShape, sphereBody, world, walls=[], balls=[], ballMeshes=[], boxes=[], boxMeshes=[];
 
-
 var keyboard = new THREEx.KeyboardState();
 var clock = new THREE.Clock();
-
-
-
-var isMobile = /iPhone|Android/i.test(navigator.userAgent);
 
 function createScene() {
 
@@ -84,7 +82,7 @@ function createLights() {
 	scene.add(shadowLight);
 }
 
-
+/*
 var loaderManager = new THREE.LoadingManager();
 loaderManager.onStart = function ( url, itemsLoaded, itemsTotal ) {
 	console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
@@ -100,7 +98,7 @@ loaderManager.onError = function ( url ) {
 	console.log( 'There was an error loading ' + url );
 };
 
-
+*/
 
 var Sea = function() {
 
@@ -412,7 +410,7 @@ var Boat = function() {
 		new THREE.Vector3(-9.75,0,-39),
 		new THREE.Vector3(-8,-3,-44),
 		new THREE.Vector3(-3,0,-48),
-			new THREE.Vector3(0,-2,-51),
+		new THREE.Vector3(0,-2,-51),
 		new THREE.Vector3(3,0,-48),
 		new THREE.Vector3(6,-3,-44),
 		new THREE.Vector3(9.75,0,-39),
@@ -912,11 +910,6 @@ function createBeacon2(x,y,z){
 	beaconArray.push(beacon);
 }
 
-function finishedLoading(){
-	loaded = true;
-	document.getElementById('preloader').classList.add('hidden');
-}
-
 function createYacht(){
 
 	var marker = new THREE.Object3D();
@@ -952,18 +945,73 @@ var tomado=[false,false,false,false,false];
 
 function init() {
 
+
+	var taken = new Array(20);
+
+	for (let i=0;i<20;i++)
+	{
+		taken[i]=false;
+	}
+
+	var possible_buoys =
+	   [
+			  [511,0.25,338],
+			 [277,0.25,-486],
+			 [-200,0.25,-594],
+			 [-496,0.25,-576],
+			 [27,0.25,-384],
+			 [248,0.25,503],
+			 [-49,0.25,695],
+			 [-361,0.25,-365],
+			 [-622,0.25,-86],
+			 [527,0.25,-79],
+			 [-497,0.25,337],
+			 [29,0.25,489],
+			 [-472,0.25,106],
+			 [-254,0.25,340],
+			 [563,0.25,-408],
+			 [-509,0.25,-331],
+			 [-236,0.25,493],
+		 	 [491,0.25,592],
+		 	 [630,0.25,146]
+		 ];
+
+
 	createScene();
 	createLights();
+	createYacht();
 	createSea();
-  createYacht();
 	createBoat();
+	initSkybox();
+
+
+
+	for (let i=0;i<5;i++)
+	{
+		let randomi;
+		while (1)
+		{
+			randomi =  Math.floor(Math.random()*19);
+			console.log(taken[randomi]);
+			if (taken[randomi] !== true)
+			{
+				break;
+			}
+		}
+
+		console.log(randomi);
+		taken[randomi] = true;
+		createBeacon(possible_buoys[randomi][0],0.25,possible_buoys[randomi][2]);
+	}
+
+
+/*
 	createBeacon( Math.random() * ((-480) - (-700)) + (-700), 0.25, Math.random() * ((-480) - (-700)) + (-700));
 	createBeacon( Math.random() * ((700) - (480)) + (480), 0.25, Math.random() * ((-480) - (-700)) + (-700));
 	createBeacon( Math.random() * ((-480) - (-700)) + (-700), 0.25, Math.random() * ((700) - (480)) + (480));
 	createBeacon( Math.random() * ((-480) - (-700)) + (-700), 0.25, Math.random() * ((700) - (480)) + (480));
 	createBeacon( Math.random() * ((700) - (480)) + (480), 0.25,Math.random() * ((700) - (480)) + (480));
-
-	initSkybox();
+*/
 	initTime();
 	loop();
 }
@@ -971,7 +1019,6 @@ function init() {
 
 
 function loop(e){
-	console.log(e);
 	sea.uniforms.uTime.value = e * 0.001;
 	swayBeacon();
 	boat.swayBoat();
@@ -1063,6 +1110,8 @@ function animation (){
 				boat.engineBlock.rotation.y = THREE.Math.clamp( engineY + delta * 1.75, - maxEngineY, 0 );
 			}
 		}
+
+	///	console.log("x->"+boat.mesh.position.x+" z->"+boat.mesh.position.z);
 
 	for (let i = 0; i < 5; i++)
 	{

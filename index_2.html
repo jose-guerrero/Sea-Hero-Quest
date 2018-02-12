@@ -16,14 +16,33 @@
 	<body>
 
 		<script>
+
+		function finishedLoading(){
+			loaded = true;
+			document.getElementById('preloader').classList.add('hidden');
+		}
+
 		function sub(){
 		var modal = document.getElementById('myModal2');
 		modal.style.display = "none";}
 		</script>
-		<div id="canvas"></div>
 		<div id="preloader">
-			<div class="sk-cube-grid"><div class="sk-cube sk-cube1"></div><div class="sk-cube sk-cube2"></div><div class="sk-cube sk-cube3"></div><div class="sk-cube sk-cube4"></div><div class="sk-cube sk-cube5"></div><div class="sk-cube sk-cube6"></div><div class="sk-cube sk-cube7"></div><div class="sk-cube sk-cube8"></div><div class="sk-cube sk-cube9"></div></div>
+			<div class="modal-content_2">
+				<h2 class = "title-modal">General Instructions</h2>
+				<p>This game emulates one level of the famous app <strong>"Sea Hero Quest"</strong>. The objective
+				is to go throught all the 5 buoys on the sea as fast as it is possible.</p>
+
+				<p>You can move the boat using <strong>"WASD"</strong></p>
+
+				<img src="images/KEYCAP.jpg" class="img-modal_2">
+
+				<p>Additionally, the button <strong>"Q"</strong> is enabled to quit from the game.</p>
+
+			<input type="button" id="but_inst" value="OK I GOT IT" onclick="finishedLoading()" />
 		</div>
+		</div>
+		<div id="canvas"></div>
+
 		<div id="myModal" class="modal">
 
   <!-- Modal content -->
