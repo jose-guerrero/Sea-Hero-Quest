@@ -145,8 +145,16 @@ z-index: 3; /* Sit on top */
 	margin: 20px auto;
 	background-color: green;
 	font-size: 25px;
-	width: 300px;
+	height: 50px;
+	width: 250px;
+	cursor: pointer;
+	border-radius: 10px;
+}
 
+#second_button:hover {
+  color: #0066cc;
+  background: #ff9933;
+  border: 1px solid #fff;
 }
 
 #yes_button{
@@ -154,7 +162,16 @@ z-index: 3; /* Sit on top */
 	margin: 20px auto;
 	background-color: lightGreen;
 	font-size: 25px;
-	width: 200px;
+	width: 180px;
+	height: 40px;
+	cursor: pointer;
+	border-radius: 10px;
+}
+
+#yes_button:hover,#no_button:hover {
+  color: #ffff00;
+  background: #0099ff;
+  border: 1px solid #fff;
 }
 
 #no_button{
@@ -162,8 +179,13 @@ z-index: 3; /* Sit on top */
 	margin: 20px auto;
 	background-color: Red;
 	font-size: 25px;
-	width: 200px;
+	width: 180px;
+	height: 40px;
+	cursor: pointer;
+	border-radius: 10px;
 }
+
+
 
 /* Modal Content */
 .modal-content_2 {

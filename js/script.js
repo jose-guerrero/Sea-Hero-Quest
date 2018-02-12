@@ -918,10 +918,7 @@ function createYacht(){
 
  }
 
-function initTime(){
-	clock.start();
 
-}
 
 var conos = 5;
 var tomado=[false,false,false,false,false];
@@ -995,7 +992,7 @@ function init() {
 	createBeacon( Math.random() * ((-480) - (-700)) + (-700), 0.25, Math.random() * ((700) - (480)) + (480));
 	createBeacon( Math.random() * ((700) - (480)) + (480), 0.25,Math.random() * ((700) - (480)) + (480));
 */
-	initTime();
+	///initTime();
 	loop();
 }
 

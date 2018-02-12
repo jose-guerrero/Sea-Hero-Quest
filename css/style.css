@@ -1,4 +1,22 @@
 
+
+@keyframes move-twink-back {
+    from {background-position:0 0;}
+    to {background-position:-10000px 5000px;}
+}
+@-webkit-keyframes move-twink-back {
+    from {background-position:0 0;}
+    to {background-position:-10000px 5000px;}
+}
+@-moz-keyframes move-twink-back {
+    from {background-position:0 0;}
+    to {background-position:-10000px 5000px;}
+}
+@-ms-keyframes move-twink-back {
+    from {background-position:0 0;}
+    to {background-position:-10000px 5000px;}
+}
+
 /*
 #body1
 {
@@ -11,7 +29,7 @@
 
 }*/
 
-body {
+#body1 {
 	background: #00b4ff;
 	color: #333;
 	font: 100% Arial, Sans Serif;
@@ -285,14 +303,56 @@ table,tr,th,td{
 #table{
 
   width: 300px;
-  margin: 100px auto;
+  margin: 100px auto 0 auto;
 }
 
 th,td,tr{
   text-align: center;
+	background-color: #66ff33;
+
 }
 
 table{
   border-collapse: collapse;
 }
-tr:nth-child(even) {background-color: #f2f2f2;}
+/*
+tr:nth-child(even) {background-color: #f2f2f2;}*/
+
+tr {background-color: #f2f2f2;}
+
+thead th{
+	height: 30px;
+}
+/* Changing row height */
+tr {
+  height: 25px;
+}
+
+/* Changing cell width. Don't forget th! */
+td, th {
+  width: 40px;
+}
+
+#back_button{
+  display: block;
+
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 100%;
+  color: 0;
+  border: 1px solid #3366cc;
+  border-radius: 10px;
+  width: 200px;
+  height: 60px;
+  margin: 30px auto;
+  font-family: Helvetica;
+  font-size: 20px;
+  background-color: #00ffff;
+}
+
+#back_button:hover {
+  color: #ffff00;
+  background: #0099ff;
+  border: 1px solid #fff;
+}

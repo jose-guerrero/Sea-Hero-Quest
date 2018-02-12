@@ -10,9 +10,10 @@
 
   <title>Sea Hero Quest</title>
 </head>
-<body>
+<body id="body3">
 
-  
+  <div id="stars"></div>
+	<div id="twinkling"></div>
 
 <div id="results">
   <table id="table">
@@ -26,7 +27,12 @@
     </tbody>
   </table>
 </table>
+<form action="index.html">
+<input type="submit" id="back_button" value="BACK">
+</form>
 </div>
+
+
   <script>
 
   $(document).ready(function(){
@@ -61,6 +67,10 @@
           cell = $('<td>'+data[i].scores[0].score+'</td>');
           row.append(cell);
         }
+
+        $("#stars").css("height",data.length*25 +254+ 'px');
+        $("#twinkling").css("height",data.length*25 +254+ 'px');
+
       },
       error : function(xhr, textStatus, errorThrown) {
 
