@@ -82,23 +82,6 @@ function createLights() {
 	scene.add(shadowLight);
 }
 
-/*
-var loaderManager = new THREE.LoadingManager();
-loaderManager.onStart = function ( url, itemsLoaded, itemsTotal ) {
-	console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
-};
-loaderManager.onLoad = function ( ) {
-	console.log( 'Loading complete!');
-	finishedLoading();
-};
-loaderManager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
-	console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
-};
-loaderManager.onError = function ( url ) {
-	console.log( 'There was an error loading ' + url );
-};
-
-*/
 
 var Sea = function() {
 
@@ -847,12 +830,12 @@ var Boat = function() {
 	cameraMesh.add(this.group);
 
 	this.mesh.add(cameraMesh);
-
+/*
 	var listener = new THREE.AudioListener();
 camera.add( listener );
-/*
-// create a global audio sourcevar sound = new THREE.Audio( listener );
 
+// create a global audio sourcevar sound = new THREE.Audio( listener );
+var sound = new THREE.Audio( listener );
 // load a sound and set it as the Audio object's buffer
 var audioLoader = new THREE.AudioLoader();
 audioLoader.load( 'sounds/tetris.mp3', function( buffer ) {
@@ -860,8 +843,8 @@ audioLoader.load( 'sounds/tetris.mp3', function( buffer ) {
 	sound.setLoop( true );
 	sound.setVolume( 0.5 );
 	sound.play();
-});
-*/
+});*/
+
 }
 
 

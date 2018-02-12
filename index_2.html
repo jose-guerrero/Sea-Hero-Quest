@@ -20,6 +20,28 @@
 		function finishedLoading(){
 			loaded = true;
 			document.getElementById('preloader').classList.add('hidden');
+
+			var listener = new THREE.AudioListener();
+		camera.add( listener );
+
+		// create a global audio sourcevar sound = new THREE.Audio( listener );
+		var sound = new THREE.Audio( listener );
+		// load a sound and set it as the Audio object's buffer
+		var audioLoader = new THREE.AudioLoader();
+		audioLoader.load( 'sounds/tetris.mp3', function( buffer ) {
+			sound.setBuffer( buffer );
+			sound.setLoop( true );
+			sound.setVolume( 0.5 );
+			sound.play();
+			});
+/*
+			var audioLoader = new THREE.AudioLoader();
+			audioLoader.load( 'sounds/tetris.mp3', function( buffer ) {
+				sound.setBuffer( buffer );
+				sound.setLoop( true );
+				sound.setVolume( 0.5 );
+				sound.play();
+			});*/
 		}
 
 		function sub(){
